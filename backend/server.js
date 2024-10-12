@@ -22,6 +22,3 @@ app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
 });
 
-// Integrate Routes into Your Server
-const authRoutes = require('./routes/auth');
-app.use('/api/auth', authRoutes);
