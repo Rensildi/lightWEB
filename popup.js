@@ -8,7 +8,7 @@ function loadBlockedWords() {
 
     chrome.storage.sync.get("blockedWords", (data) => {
         const wordList = document.getElementById("wordList");
-        wordList.innerHTML = ""; // Clear existing list
+        wordList.innerHTML = ""; 
         if (data.blockedWords) {
             data.blockedWords.forEach((word) => {
                 const li = document.createElement("li");
@@ -28,8 +28,8 @@ function addBlockedWord() {
             const blockedWords = data.blockedWords || [];
             blockedWords.push(newWord);
             chrome.storage.sync.set({ blockedWords }, () => {
-                loadBlockedWords(); // Reload the list
-                wordInput.value = ""; // Clear input
+                loadBlockedWords(); 
+                wordInput.value = ""; 
             });
         });
     }

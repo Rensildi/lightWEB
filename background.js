@@ -20,9 +20,9 @@ chrome.webRequest.onBeforeRequest.addListener(
         if (shouldBlock) {
             console.log(`Blocking access to: ${url}`);
         }
-        return { cancel: shouldBlock }; // Block the request if it matches
+        return { cancel: shouldBlock }; 
     },
-    { urls: ["<all_urls>"] }, // Listen to all URLs
+    { urls: ["<all_urls>"] }, 
     ["blocking"]
 );
 
