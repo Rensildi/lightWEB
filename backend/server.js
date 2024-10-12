@@ -6,9 +6,13 @@ const cors = require('cors');
 const app = express();
 const PORT = process.env.PORT || 5000;
 
+// dotenv requirement
+require('dotenv').config();
+
 // Middleware
 app.use(cors());
 app.use(express.json());
+
 
 // Connect to MongoDB
 mongoose.connect('mongodb://localhost:27017/content-blocker', {
