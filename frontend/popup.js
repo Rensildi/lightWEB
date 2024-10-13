@@ -1,68 +1,57 @@
+// Import the functions you need from the SDKs you need
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js";
+import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-firestore.js";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-auth.js";
+
+// Import the functions you need from the SDKs you need
+import { initializeApp } from "firebase/app";
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
+
+// Your web app's Firebase configuration
+const firebaseConfig = {
+  apiKey: "AIzaSyCDZxYxKiMhwKtDD4t7_mfxmTtR6H0hye4",
+  authDomain: "lightweb-6d857.firebaseapp.com",
+  projectId: "lightweb-6d857",
+  storageBucket: "lightweb-6d857.appspot.com",
+  messagingSenderId: "679588894396",
+  appId: "1:679588894396:web:3223b45083952f12b4e2b9"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const auth = getAuth(app);
+
 const signupButton = document.getElementById('signupButton');
 const signinButton = document.getElementById('signinButton');
-const blockButton = document.getElementById('blockButton'); // New button for blocking websites
 
-// Sign Up functionality
 signupButton.addEventListener('click', async () => {
     const username = document.getElementById('signupUsername').value;
     const password = document.getElementById('signupPassword').value;
 
     try {
-        const response = await fetch('http://localhost:5000/api/users/signup', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ username, password })
-        });
-        const data = await response.json();
-        if (response.ok) {
-            alert('User created successfully!'); // Alert for success
-        } else {
-            alert(data.error || 'An error occurred during sign up.'); // Alert for error
-        }
+        const userCredential = await createUserWithEmailAndPassword(auth, username, password);
+        const user = userCredential.user;
+        alert('User created successfully!'); // Alert for success
+        // Optionally, you can add user data to Firestore here
     } catch (error) {
         console.error('Error during sign up:', error);
-        alert('An unexpected error occurred. Please try again.');
+        alert(error.message); // Alert for error
     }
 });
 
-// Sign In functionality
 signinButton.addEventListener('click', async () => {
     const username = document.getElementById('signinUsername').value;
     const password = document.getElementById('signinPassword').value;
 
     try {
-        const response = await fetch('http://localhost:5000/api/users/signin', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ username, password })
-        });
-        const data = await response.json();
-        if (response.ok) {
-            alert('Sign in successful!'); // Alert for success
-            // Optionally, store the token for later use
-            localStorage.setItem('token', data.token);
-        } else {
-            alert(data.error || 'An error occurred during sign in.'); // Alert for error
-        }
+        const userCredential = await signInWithEmailAndPassword(auth, username, password);
+        const user = userCredential.user;
+        alert('Sign in successful!'); // Alert for success
+        // You can now access Firestore and do operations
     } catch (error) {
         console.error('Error during sign in:', error);
-        alert('An unexpected error occurred. Please try again.');
+        alert(error.message); // Alert for error
     }
-});
-
-// Block Websites functionality
-blockButton.addEventListener('click', () => {
-    const websitesInput = document.getElementById('blockedWebsites').value;
-    const websites = websitesInput.split(',').map(website => website.trim()); // Split and trim
-
-    chrome.runtime.sendMessage({
-        action: "updateBlockedWebsites",
-        websites: websites
-    }, (response) => {
-        if (response.success) {
-            alert('Websites blocked successfully!'); // Alert for success
-        } else {
-            alert('An error occurred while blocking websites.'); // Alert for error
-        }
-    });
 });
