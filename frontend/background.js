@@ -1,15 +1,15 @@
-const blockedWebsites = []; // This will be dynamically updated later
+let blockedWebsites = ["example.com"]; 
 
-// Function to update blocked websites
+// Function to update blocked websites and reload rules
 function updateBlockedWebsites(newWebsites) {
-    // Clear previous rules
+    // Clear existing rules
     chrome.declarativeNetRequest.updateDynamicRules({
-        removeRuleIds: ['block_specific_websites']
+        removeRuleIds: ['block_specific_websites'] // Remove previous rules by ID
     });
 
-    // Create new rules for the blocked websites
-    const rules = newWebsites.map((website, index) => ({
-        id: `block_${index}`, // Unique rule ID for each website
+    // Create new rules based on the updated blocked websites
+    const rules = newWebsites.map((website) => ({
+        id: "block_specific_websites",
         condition: {
             urlFilter: `*://*.${website}/*`,
             resourceTypes: ["main_frame"]
@@ -25,10 +25,11 @@ function updateBlockedWebsites(newWebsites) {
     });
 }
 
-// Listen for messages from content scripts or popup
+// Listen for messages from popup to update blocked websites
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     if (request.action === "updateBlockedWebsites") {
-        updateBlockedWebsites(request.websites);
+        blockedWebsites.push(...request.websites);
+        updateBlockedWebsites(blockedWebsites); // Update the rules with the new websites
         sendResponse({ success: true });
     }
 });
