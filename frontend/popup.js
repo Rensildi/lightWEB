@@ -55,3 +55,14 @@ signinButton.addEventListener('click', async () => {
         alert(error.message); // Alert for error
     }
 });
+
+document.getElementById("blockButton").addEventListener("click", () => {
+    const websites = ["example.com", "anotherexample.com"]; // Replace with actual input from the user
+    chrome.runtime.sendMessage({ action: "updateBlockedWebsites", websites: websites }, (response) => {
+        if (response.success) {
+            console.log("Websites updated successfully.");
+        } else {
+            console.error("Failed to update websites.");
+        }
+    });
+});
