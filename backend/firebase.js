@@ -4,7 +4,7 @@ const serviceAccount = require('./path/to/your/serviceAccountKey.json'); // Repl
 
 admin.initializeApp({
     credential: admin.credential.cert(serviceAccount),
-    databaseURL: "https://<your-database-name>.firebaseio.com" // Replace with your Firebase database URL
+    databaseURL: "https://lightWEB.firebaseio.com" // Replace with your Firebase database URL
 });
 
 module.exports = admin;
