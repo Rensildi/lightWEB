@@ -1,6 +1,6 @@
 [
     {
-        "id": "1",
+        "id": 1,
         "condition": {
             "urlFilter": "*://*.example.com/*",
             "resourceTypes": ["main_frame"]
@@ -10,7 +10,7 @@
         }
     },
     {
-        "id": "2",
+        "id": 2,
         "condition": {
             "urlFilter": "*://*.other-example.com/*",
             "resourceTypes": ["main_frame"]
@@ -20,7 +20,7 @@
         }
     },
     {
-        "id": "3",
+        "id": 3,
         "condition": {
             "urlFilter": "*://*.other-example.com/*",
             "resourceTypes": ["main_frame"]
@@ -30,7 +30,7 @@
         }
     },
     {
-        "id": "4",
+        "id": 4,
         "condition": {
             "urlFilter": "*://*.other-example.com/*",
             "resourceTypes": ["main_frame"]
@@ -40,7 +40,7 @@
         }
     },
     {
-        "id": "4",
+        "id": 5,
         "condition": {
             "urlFilter": "*://*.other-example.com/*",
             "resourceTypes": ["main_frame"]
