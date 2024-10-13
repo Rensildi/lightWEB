@@ -45,4 +45,23 @@ router.post('/signin', async (req, res) => {
     }
 });
 
+// Update blocked websites route
+router.post('/update-blocked', async (req, res) => {
+    const { username, blockedWebsites } = req.body;
+
+    try {
+        const user = await User.findOneAndUpdate(
+            { username },
+            { blockedWebsites },
+            { new: true } // Return the updated document
+        );
+
+        if (!user) return res.status(404).json({ message: 'User not found' });
+        res.json({ message: 'Blocked websites updated', blockedWebsites: user.blockedWebsites });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Failed to update blocked websites' });
+    }
+});
+
 module.exports = router;
