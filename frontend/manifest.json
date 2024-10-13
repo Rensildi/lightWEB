@@ -29,7 +29,7 @@
         "rule_resources": [{
             "id": "ruleset",
             "enabled": true,
-            "path": "rules.json"  // Ensure this path points to your rules.json
+            "path": "rules.json"
         }]
     }
 }
