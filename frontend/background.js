@@ -1,32 +1,24 @@
 // background.js
-chrome.runtime.onInstalled.addListener(() => {
-    console.log("Extension installed and background script running.");
-});
+const blockedWebsites = []; // This will be dynamically updated later
 
-// Hardcoded blocked websites
-const blockedSites = [
-    "https://www.facebook.com",
-    "https://www.twitter.com",
-    "https://www.instagram.com",
-    "https://www.tiktok.com",
-    "https://www.snapchat.com"
-];
-
-// Listen for web requests to block specified sites
+// Listener for blocking requests
 chrome.webRequest.onBeforeRequest.addListener(
     (details) => {
-        const url = details.url;
-        const shouldBlock = blockedSites.some(site => url.startsWith(site));
-        if (shouldBlock) {
-            console.log(`Blocking access to: ${url}`);
-        }
-        return { cancel: shouldBlock }; 
+        return { cancel: true };
     },
-    { urls: ["<all_urls>"] }, 
+    { urls: blockedWebsites.map(website => `*://*.${website}/*`) },
     ["blocking"]
 );
 
+// Function to update blocked websites
+function updateBlockedWebsites(newWebsites) {
+    blockedWebsites.push(...newWebsites);
+}
 
-chrome.runtime.onInstalled.addListener(() => {
-    console.log("Content Blocker Extension installed and ready.");
+// Listen for messages from content scripts or popup
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+    if (request.action === "updateBlockedWebsites") {
+        updateBlockedWebsites(request.websites);
+        sendResponse({ success: true });
+    }
 });
