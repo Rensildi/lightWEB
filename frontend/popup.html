@@ -7,18 +7,30 @@
 </head>
 <body>
     <h1>Content Blocker</h1>
+    
+    <!-- Sign Up Section -->
     <div>
         <h2>Sign Up</h2>
         <input type="text" id="signupUsername" placeholder="Username" required>
         <input type="password" id="signupPassword" placeholder="Password" required>
         <button id="signupButton">Sign Up</button>
     </div>
+    
+    <!-- Sign In Section -->
     <div>
         <h2>Sign In</h2>
         <input type="text" id="signinUsername" placeholder="Username" required>
         <input type="password" id="signinPassword" placeholder="Password" required>
         <button id="signinButton">Sign In</button>
     </div>
+    
+    <!-- Block Websites Section -->
+    <div>
+        <h2>Block Websites</h2>
+        <input type="text" id="blockedWebsites" placeholder="Enter websites to block (comma-separated)">
+        <button id="blockButton">Block Websites</button>
+    </div>
+
     <script src="popup.js"></script>
 </body>
 </html>

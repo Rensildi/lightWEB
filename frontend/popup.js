@@ -1,8 +1,8 @@
-// popup.js
-
 const signupButton = document.getElementById('signupButton');
 const signinButton = document.getElementById('signinButton');
+const blockButton = document.getElementById('blockButton'); // New button for blocking websites
 
+// Sign Up functionality
 signupButton.addEventListener('click', async () => {
     const username = document.getElementById('signupUsername').value;
     const password = document.getElementById('signupPassword').value;
@@ -25,6 +25,7 @@ signupButton.addEventListener('click', async () => {
     }
 });
 
+// Sign In functionality
 signinButton.addEventListener('click', async () => {
     const username = document.getElementById('signinUsername').value;
     const password = document.getElementById('signinPassword').value;
@@ -47,4 +48,21 @@ signinButton.addEventListener('click', async () => {
         console.error('Error during sign in:', error);
         alert('An unexpected error occurred. Please try again.');
     }
+});
+
+// Block Websites functionality
+blockButton.addEventListener('click', () => {
+    const websitesInput = document.getElementById('blockedWebsites').value;
+    const websites = websitesInput.split(',').map(website => website.trim()); // Split and trim
+
+    chrome.runtime.sendMessage({
+        action: "updateBlockedWebsites",
+        websites: websites
+    }, (response) => {
+        if (response.success) {
+            alert('Websites blocked successfully!'); // Alert for success
+        } else {
+            alert('An error occurred while blocking websites.'); // Alert for error
+        }
+    });
 });
