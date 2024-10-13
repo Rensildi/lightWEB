@@ -1,32 +1,28 @@
-// background.js
-chrome.runtime.onInstalled.addListener(() => {
-    console.log("Extension installed and background script running.");
-});
-
-// Hardcoded blocked websites
-const blockedSites = [
-    "https://www.facebook.com",
-    "https://www.twitter.com",
-    "https://www.instagram.com",
-    "https://www.tiktok.com",
-    "https://www.snapchat.com"
-];
-
-// Listen for web requests to block specified sites
-chrome.webRequest.onBeforeRequest.addListener(
-    (details) => {
-        const url = details.url;
-        const shouldBlock = blockedSites.some(site => url.startsWith(site));
-        if (shouldBlock) {
-            console.log(`Blocking access to: ${url}`);
+function addBlockedWebsites(websites) {
+    const rules = websites.map((website, index) => ({
+        id: index + 1, // Ensure unique IDs
+        action: { type: "block" },
+        condition: {
+            urlFilter: `*://*.${website}/*`,
+            resourceTypes: ["main_frame"]
         }
-        return { cancel: shouldBlock }; 
-    },
-    { urls: ["<all_urls>"] }, 
-    ["blocking"]
-);
+    }));
 
+    // Remove all existing dynamic rules before adding new ones
+    chrome.declarativeNetRequest.getDynamicRules((existingRules) => {
+        const existingRuleIds = existingRules.map(rule => rule.id);
+        chrome.declarativeNetRequest.updateDynamicRules({
+            removeRuleIds: existingRuleIds,
+            addRules: rules
+        }, () => {
+            console.log('Updated rules:', rules);
+        });
+    });
+}
 
-chrome.runtime.onInstalled.addListener(() => {
-    console.log("Content Blocker Extension installed and ready.");
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+    if (message.action === "updateBlockedWebsites") {
+        addBlockedWebsites(message.websites);
+        sendResponse({ success: true });
+    }
 });

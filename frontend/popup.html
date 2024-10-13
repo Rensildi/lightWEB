@@ -1,14 +1,16 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Content Blocker</title>
-    <script src="popup.js" defer></script>
-    <link rel="stylesheet" href="styles.css">
+    <title>Social Media Toggle</title>
 </head>
 <body>
-    <h1>Blocked Websites</h1>
-    <ul id="blockedList"></ul>
+    <h1>Social Media Toggle</h1>
+    <label><input type="checkbox" id="instagram"> Instagram</label>
+    <label><input type="checkbox" id="facebook"> Facebook</label>
+    <label><input type="checkbox" id="snapchat"> Snapchat</label>
+    <label><input type="checkbox" id="twitter"> Twitter</label>
+    <button id="savePreferences">Save Preferences</button>
+    <button id="openWebsite">Go to Website</button>
+    <script src="popup.js"></script>
 </body>
 </html>

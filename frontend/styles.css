@@ -1,39 +1,88 @@
+/* General Styles */
 body {
     font-family: Arial, sans-serif;
-    width: 250px;
-    padding: 10px;
-    background-color: #f9f9f9;
-    color: #333;
+    background-color: #e9ecef;
+    margin: 0;
+    padding: 20px;
+}
+
+#app {
+    max-width: 400px;
+    margin: 50px auto;
+    background: #ffffff;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 h1 {
+    color: #007bff;
+    font-size: 24px;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+h2 {
+    color: #495057;
     font-size: 20px;
-    text-align: center;
-    color: #4CAF50;
     margin-bottom: 15px;
-}
-
-ul {
-    list-style-type: none;
-    padding: 0;
-}
-
-li {
-    background-color: #e7f3e7;
-    border: 1px solid #c5e1c5;
-    margin: 5px 0;
-    padding: 8px;
-    border-radius: 4px;
     text-align: center;
-    color: #2d7d2d;
 }
 
-li:hover {
-    background-color: #d4edd4;
+/* Input Styles */
+input[type="text"],
+input[type="password"] {
+    display: block;
+    width: calc(100% - 20px);
+    padding: 12px;
+    margin: 10px auto;
+    font-size: 16px;
+    border: 1px solid #ced4da;
+    border-radius: 5px;
+    transition: border-color 0.3s;
 }
 
-p {
-    text-align: center;
-    font-size: 14px;
-    color: #666;
+input[type="text"]:focus,
+input[type="password"]:focus {
+    border-color: #007bff;
+    outline: none;
+}
+
+/* Button Styles */
+button {
+    display: block;
+    width: 100%;
+    padding: 12px;
+    margin: 15px 0;
+    font-size: 16px;
+    background-color: #007bff;
+    color: #ffffff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+/* Checkbox Styles */
+#toggleOptions label {
+    display: block;
+    margin: 10px 0;
+    font-size: 16px;
+    color: #495057;
+}
+
+#toggleOptions input[type="checkbox"] {
+    margin-right: 8px;
+}
+
+/* Media Query for Responsiveness */
+@media (max-width: 480px) {
+    #app {
+        width: 90%;
+        padding: 20px;
+    }
 }

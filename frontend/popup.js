@@ -1,42 +1,31 @@
-// Function to load blocked words from storage and display them
-function loadBlockedWords() {
-    // Check if chrome object is available
-    if (typeof chrome === 'undefined' || typeof chrome.storage === 'undefined' || typeof chrome.storage.sync === 'undefined') {
-        console.error("Chrome API is not available.");
-        return;
-    }
+document.addEventListener('DOMContentLoaded', () => {
+    const savePreferencesButton = document.getElementById('savePreferences');
+    const openWebsiteButton = document.getElementById('openWebsite');
 
-    chrome.storage.sync.get("blockedWords", (data) => {
-        const wordList = document.getElementById("wordList");
-        wordList.innerHTML = ""; 
-        if (data.blockedWords) {
-            data.blockedWords.forEach((word) => {
-                const li = document.createElement("li");
-                li.textContent = word;
-                wordList.appendChild(li);
-            });
-        }
-    });
-}
+    if (savePreferencesButton) {
+        savePreferencesButton.addEventListener('click', () => {
+            const blockedWebsites = [];
+            if (document.getElementById('instagram').checked) blockedWebsites.push('instagram.com');
+            if (document.getElementById('facebook').checked) blockedWebsites.push('facebook.com');
+            if (document.getElementById('snapchat').checked) blockedWebsites.push('snapchat.com');
+            if (document.getElementById('twitter').checked) blockedWebsites.push('twitter.com');
 
-// Function to add a blocked word
-function addBlockedWord() {
-    const wordInput = document.getElementById("blockedWord");
-    const newWord = wordInput.value.trim();
-    if (newWord) {
-        chrome.storage.sync.get("blockedWords", (data) => {
-            const blockedWords = data.blockedWords || [];
-            blockedWords.push(newWord);
-            chrome.storage.sync.set({ blockedWords }, () => {
-                loadBlockedWords(); 
-                wordInput.value = ""; 
+            chrome.runtime.sendMessage({
+                action: 'updateBlockedWebsites',
+                websites: blockedWebsites
+            }, (response) => {
+                if (response.success) {
+                    alert('Websites blocked successfully!');
+                } else {
+                    alert('Failed to block websites');
+                }
             });
         });
     }
-}
 
-// Event listener for the add button
-document.getElementById("addWord").addEventListener("click", addBlockedWord);
-
-// Load the blocked words on popup open
-document.addEventListener('DOMContentLoaded', loadBlockedWords);
+    if (openWebsiteButton) {
+        openWebsiteButton.addEventListener('click', () => {
+            chrome.tabs.create({ url: 'file:///C:/xampp/htdocs/lightWEB/frontend/index.html' });
+        });
+    }
+});
