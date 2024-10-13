@@ -4,7 +4,7 @@ function loadFirebaseScript(url) {
         const script = document.createElement('script');
         script.src = url;
         script.onload = resolve;
-        script.onerror = reject;
+        script.onerror = (e) => reject(new Error(`Failed to load script ${url}`));
         document.head.appendChild(script);
     });
 }
@@ -24,8 +24,9 @@ async function initFirebase() {
             messagingSenderId: "679588894396",
             appId: "1:679588894396:web:3223b45083952f12b4e2b9"
         };
-        
-        const app = firebase.initializeApp(firebaseConfig);
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
         // Now you can use Firebase services like Firestore and Auth
     } catch (error) {
         console.error("Error loading Firebase scripts: ", error);
