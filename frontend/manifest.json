@@ -1,38 +1,11 @@
 {
     "manifest_version": 3,
-    "name": "Content Blocker",
+    "name": "Contet Blocker",
     "version": "1.0",
-    "content_security_policy": {
-        "extension_pages": "script-src 'self'; object-src 'none';"
-    },
-    "description": "Blocks explicit content based on user-defined keywords.",
-    "permissions": [
-        "storage",
-        "declarativeNetRequest",
-        "declarativeNetRequestFeedback"
-    ],
-    "host_permissions": ["<all_urls>"],
+    "description": "Toggle social media access.",
     "action": {
-        "default_popup": "popup.html",
-        "default_icon": {
-            "16": "icon-16.png",
-            "48": "icon-48.png",
-            "128": "icon-128.png"
-        }
+      "default_popup": "popup.html"
     },
-    "background": {
-        "service_worker": "background.js"
-    },
-    "icons": {
-        "16": "icon-16.png",
-        "48": "icon-48.png",
-        "128": "icon-128.png"
-    },
-    "declarative_net_request": {
-        "rule_resources": [{
-            "id": "ruleset",
-            "enabled": true,
-            "path": "rules.json"
-        }]
-    }
-}
+    "permissions": ["storage", "tabs"]
+  }
+  
