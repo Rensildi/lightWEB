@@ -3,7 +3,7 @@
     "name": "Content Blocker",
     "version": "1.0",
     "content_security_policy": {
-        "extension_pages": "script-src 'self' https://www.gstatics.com https://www.googleapis.com; object-src 'none';"
+    "extension_pages": "script-src 'self' https://www.gstatic.com https://www.googleapis.com; object-src 'none';"
     },
     "description": "Blocks explicit content based on user-defined keywords.",
     "permissions": [
