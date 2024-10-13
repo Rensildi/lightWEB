@@ -8,9 +8,22 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <h1>Blocked Websites</h1>
-    <input type="text" id="blockedWord" placeholder="Add blocked word" />
-    <button id="addWord">Add</button>
+    <h1>Content Blocker</h1>
+    
+    <h2>Sign Up</h2>
+    <form id="signupForm">
+        <input type="text" name="username" placeholder="Username" required />
+        <input type="password" name="password" placeholder="Password" required />
+        <button type="submit">Sign Up</button>
+    </form>
+
+    <h2>Sign In</h2>
+    <form id="signinForm">
+        <input type="text" name="username" placeholder="Username" required />
+        <input type="password" name="password" placeholder="Password" required />
+        <button type="submit">Sign In</button>
+    </form>
+    
     <ul id="wordList"></ul>
 </body>
 </html>
