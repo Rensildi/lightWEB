@@ -2,7 +2,7 @@
 const express = require('express');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const User = require('../models/User'); // Ensure the path is correct
+const admin = require('../firebase'); // Import Firebase Admin
 const router = express.Router();
 const JWT_SECRET = process.env.JWT_SECRET;
 
@@ -11,15 +11,18 @@ router.post('/signup', async (req, res) => {
     const { username, password } = req.body;
 
     try {
-        const existingUser = await User.findOne({ username });
-        if (existingUser) {
-            return res.status(400).json({ message: 'User already exists' });
-        }
+        const userRecord = await admin.auth().createUser({
+            email: username, // Use email as username
+            password: password,
+        });
 
-        const hashedPassword = await bcrypt.hash(password, 10);
-        const user = new User({ username, password: hashedPassword });
-        await user.save();
-        res.status(201).json({ message: 'User created successfully' });
+        // Save additional user data in Firestore
+        await admin.firestore().collection('users').doc(userRecord.uid).set({
+            username,
+            blockedWebsites: [],
+        });
+
+        res.status(201).json({ message: 'User created successfully', uid: userRecord.uid });
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: 'User registration failed' });
@@ -31,14 +34,14 @@ router.post('/signin', async (req, res) => {
     const { username, password } = req.body;
 
     try {
-        const user = await User.findOne({ username });
-        if (!user) return res.status(404).json({ message: 'User not found' });
+        const userRecord = await admin.auth().getUserByEmail(username);
 
-        const isMatch = await bcrypt.compare(password, user.password);
+        // Verify password
+        const isMatch = await bcrypt.compare(password, userRecord.passwordHash); // This assumes you handle hashed password storage
         if (!isMatch) return res.status(401).json({ message: 'Invalid credentials' });
 
-        const token = jwt.sign({ id: user._id }, JWT_SECRET, { expiresIn: '1h' });
-        res.json({ token, user });
+        const token = jwt.sign({ uid: userRecord.uid }, JWT_SECRET, { expiresIn: '1h' });
+        res.json({ token, user: userRecord });
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: 'Sign in failed' });
@@ -47,17 +50,12 @@ router.post('/signin', async (req, res) => {
 
 // Update blocked websites route
 router.post('/update-blocked', async (req, res) => {
-    const { username, blockedWebsites } = req.body;
+    const { uid, blockedWebsites } = req.body; // Use uid instead of username
 
     try {
-        const user = await User.findOneAndUpdate(
-            { username },
-            { blockedWebsites },
-            { new: true } // Return the updated document
-        );
+        await admin.firestore().collection('users').doc(uid).update({ blockedWebsites });
 
-        if (!user) return res.status(404).json({ message: 'User not found' });
-        res.json({ message: 'Blocked websites updated', blockedWebsites: user.blockedWebsites });
+        res.json({ message: 'Blocked websites updated', blockedWebsites });
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: 'Failed to update blocked websites' });
