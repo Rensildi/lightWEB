@@ -2,9 +2,6 @@
     "manifest_version": 3,
     "name": "Content Blocker",
     "version": "1.0",
-    "content_security_policy": {
-    "extension_pages": "script-src 'self' https://www.gstatic.com https://www.googleapis.com; object-src 'none';"
-    },
     "description": "Blocks explicit content based on user-defined keywords.",
     "permissions": [
         "storage",
@@ -28,11 +25,7 @@
         "48": "icon-48.png",
         "128": "icon-128.png"
     },
-    "declarative_net_request": {
-        "rule_resources": [{
-            "id": "ruleset",
-            "enabled": true,
-            "path": "rules.json"
-        }]
+    "content_security_policy": {
+        "extension_pages": "script-src 'self'; object-src 'none';"
     }
 }
