@@ -1,35 +1,30 @@
-let blockedWebsites = ["example.com"]; 
+// background.js
 
-// Function to update blocked websites and reload rules
-function updateBlockedWebsites(newWebsites) {
-    // Clear existing rules
-    chrome.declarativeNetRequest.updateDynamicRules({
-        removeRuleIds: ['block_specific_websites'] // Remove previous rules by ID
-    });
-
-    // Create new rules based on the updated blocked websites
-    const rules = newWebsites.map((website) => ({
-        id: "block_specific_websites",
-        condition: {
-            urlFilter: `*://*.${website}/*`,
-            resourceTypes: ["main_frame"]
-        },
-        action: {
-            type: "block"
+// Function to add rules dynamically
+function addBlockedWebsites(websites) {
+    const rules = websites.map((website, index) => ({
+        id: index + 1, // Rule IDs must be unique
+        action: { type: "block" },
+        condition: { 
+            urlFilter: `*://*.${website}/*`, 
+            resourceTypes: ["main_frame"] 
         }
     }));
 
-    // Add the new rules
-    chrome.declarativeNetRequest.updateDynamicRules({
-        addRules: rules
+    // Remove all existing dynamic rules before adding new ones
+    chrome.declarativeNetRequest.getDynamicRules((existingRules) => {
+        const existingRuleIds = existingRules.map(rule => rule.id);
+        chrome.declarativeNetRequest.updateDynamicRules({
+            removeRuleIds: existingRuleIds,
+            addRules: rules
+        });
     });
 }
 
-// Listen for messages from popup to update blocked websites
-chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-    if (request.action === "updateBlockedWebsites") {
-        blockedWebsites.push(...request.websites);
-        updateBlockedWebsites(blockedWebsites); // Update the rules with the new websites
+// Listener for messages from popup.js
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+    if (message.action === "updateBlockedWebsites") {
+        addBlockedWebsites(message.websites);
         sendResponse({ success: true });
     }
 });
